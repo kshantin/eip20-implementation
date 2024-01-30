@@ -2,3 +2,4 @@
 optimizer = true
 optimizer_runs = 800
 bytecode_hash = "none"
+libs = ["node_modules", "lib"]

@@ -4,7 +4,7 @@ pragma solidity 0.8.20;
 import {ERC20Impl} from "../src/ERC20Impl.sol"; 
 import {DSTest} from "ds-test/test.sol";
 import {Vm} from "forge-std/Vm.sol"; 
-import "forge-std/Console.sol";
+// import "forge-std/console.sol";
 // import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract TestERC20 is DSTest { 
