@@ -1,0 +1,13 @@
+# Yarn
+.yarn/
+
+# Forge artifacts
+out/
+cache/
+
+# Forge libraries
+lib/
+
+# solidity-coverage artifacts
+coverage/
+coverage.json
