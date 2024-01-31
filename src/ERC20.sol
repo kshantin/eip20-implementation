@@ -4,12 +4,6 @@ pragma solidity 0.8.20;
 import "../utils/IERC20.sol";
 import "../utils/ERC6093.sol";
 
-error InvalidSender(address from); 
-error InvalidReciver(address to); 
-error OverflowTotalSupply(uint256 sum, uint256 totalSupply); 
-error InsufficientBalance(address _from, uint256 fromBalance, uint256 _value); 
-error InsufficientAllowance(address _from, uint256 currAllowance, uint256 _value); 
-
 abstract contract ERC20 is IERC20 { 
     string public _name;
     string private _symbol;
@@ -19,10 +13,9 @@ abstract contract ERC20 is IERC20 {
     mapping(address => uint256) private _balances; 
     mapping(address => mapping(address => uint256)) private _allowancens;
 
-    constructor(string memory name_, string memory symbol_, uint256 amount_) { 
+    constructor(string memory name_, string memory symbol_) { 
         _name = name_; 
         _symbol = symbol_;
-        _amount = amount_;
     }
     
     function name() public view returns (string memory) { 
@@ -52,17 +45,17 @@ abstract contract ERC20 is IERC20 {
 
     function transferFrom(address _from, address  _to, uint256 _value) external returns (bool success) {
         address spender = msg.sender;
-        if(_from != address(0)) { 
+        if(_from == address(0)) { 
             revert ERC20InvalidSender(address(0));
         }
-        if(_to != address(0)) { 
+        if(_to == address(0)) { 
             revert ERC20InvalidRecevier(address(0));
         }
         _spendAllowance(_from, spender, _value);
         _transfer(_from, _to, _value);
         return true; 
     }
-    
+
     function approve(address _spender, uint256 _value) external returns (bool success) {
         _approve(msg.sender, _spender, _value);
         return true;
@@ -84,10 +77,10 @@ abstract contract ERC20 is IERC20 {
     }
 
     function _transfer(address _from, address _to, uint256 _value) internal {
-        if(_from != address(0)) { 
+        if(_from == address(0)) { 
             revert ERC20InvalidSender(address(0));
         }
-        if(_to != address(0)) { 
+        if(_to == address(0)) { 
             revert ERC20InvalidRecevier(address(0));
         }
         _update(_from, _to, _value);
@@ -100,7 +93,7 @@ abstract contract ERC20 is IERC20 {
             }
         } else { 
             if (_balances[_from] < _value) { 
-                revert InsufficientBalance(_from, _balances[_from], _value);
+                revert ERC20InsufficientBalance(_from, _balances[_from], _value);
             }
             unchecked {
                 _balances[_from] -= _value; 
@@ -123,7 +116,7 @@ abstract contract ERC20 is IERC20 {
     function _spendAllowance(address _owner, address _spender, uint256 _value) internal virtual { 
         uint256 currentAllowance = allowance(_owner, _spender);
         if(currentAllowance < _value) { 
-            revert InsufficientAllowance(_owner, currentAllowance, _value);  
+            revert ERC20InsufficientAllowance(_owner, currentAllowance, _value);  
         }
         _approve(_owner, _spender, _value);
     }

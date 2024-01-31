@@ -31,9 +31,10 @@
   "scripts": {
     "build": "forge build --sizes",
     "coverage": "forge coverage",
+    "coverage:html": "yarn build && forge coverage --report lcov && genhtml lcov.info -o coverage --branch-coverage",
     "rebuild": "forge build --sizes --force",
-    "test": "forge test",
-    "test:info": "forge test -vvvv --gas-report",
+    "test": "yarn build && forge test",
+    "test:info": "yarn build && forge test -vvvv --gas-report",
     "update": "forge update",
     "lint:sol": "solhint --config ./.solhint.json --max-warnings 0 \"./src/contracts/**/*.sol\"",
     "lint": "yarn run lint:sol && yarn prettier",
