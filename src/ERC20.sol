@@ -4,7 +4,7 @@ pragma solidity 0.8.20;
 import "../utils/IERC20.sol";
 import "../utils/ERC6093.sol";
 
-abstract contract ERC20 is IERC20 { 
+    contract ERC20 is IERC20 { 
     string public _name;
     string private _symbol;
     uint256 private _amount;
