@@ -2,13 +2,11 @@
 pragma solidity 0.8.20;
 
 import {ERC20Impl} from "../src/ERC20Impl.sol"; 
-import {DSTest} from "ds-test/test.sol";
-import {Vm} from "forge-std/Vm.sol"; 
-// import "forge-std/console.sol";
-// import "@openzeppelin/contracts/utils/Strings.sol";
+// import {Vm} from "forge-std/Vm.sol";
+// import {console} from "forge-std/console.sol";
+import {Test, console2} from "forge-std/Test.sol";
 
 contract TestERC20 is DSTest { 
-    using Strings for uint256;
     Vm internal immutable vm = Vm(HEVM_ADDRESS); 
     ERC20Impl public erc20;
 
@@ -36,12 +34,13 @@ contract TestERC20 is DSTest {
         assertEq(erc20.decimals(), 18);
     }
     
-    // function testMint() public {
-    //     vm.prank(DEPLOYER);
-    //     erc20.mint(ALICE, 10 ** erc20.decimals());
-    //     assertEq(erc20.balanceOf(ALICE), 10 ** erc20.decimals());
-    //     assertEq(erc20.totalSupply(), 110 ** erc20.decimals());
-    // }
+    function testTransfer() public {
+        vm.prank(address(0));
+        uint256 value = 100 * (10 ** erc20.decimals());
+        erc20.transfer(DEPLOYER, value);
+        assertEq(erc20.balanceOf(ALICE), 10 ** erc20.decimals());
+        assertEq(erc20.totalSupply(), 110 ** erc20.decimals());
+    }
     // function testTransfer() public {}
     // function testTransferFrom() public {} 
     // function testApprove() public {}

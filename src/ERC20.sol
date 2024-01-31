@@ -93,39 +93,28 @@ abstract contract ERC20 is IERC20 {
         _update(_from, _to, _value);
     }
 
-    function _mint(address _to, uint256 _value) internal { 
-        if (_to == address(0)) { 
-            revert InvalidReciver(_to);
-        }
-        _update(address(0), _to, _value);  
-    }
-    
-    function _burn(address _from, uint256 _value) internal { 
-        if (_from == address(0)) { 
-            revert InvalidSender(_from);
-        }
-        _update(_from, address(0), _value);  
-    }
-    
-
     function _update(address _from, address _to, uint256 _value) internal virtual { 
         if (_from == address(0)) { 
-            _totalSupply += _value;
+            unchecked {
+                _totalSupply += _value;
+            }
         } else { 
             if (_balances[_from] < _value) { 
                 revert InsufficientBalance(_from, _balances[_from], _value);
             }
-            _balances[_from] -= _value; 
+            unchecked {
+                _balances[_from] -= _value; 
+            }
         }
 
-        if (_to == address(0)) { 
-            _totalSupply -= _value;
-        } else { 
-            uint256 sumBalanceToAndValue = _balances[_to] + _value;
-            if (sumBalanceToAndValue > _totalSupply) { 
-                revert OverflowTotalSupply(sumBalanceToAndValue, _totalSupply);
+        if (_to == address(0)) {
+            unchecked {
+                _totalSupply -= _value;
             }
-            _balances[_to] += _value;    
+        } else {
+            unchecked {
+                _balances[_to] += _value;
+            }
         }
         
         emit Transfer(_from, _to, _value);
